@@ -2,27 +2,30 @@ package one.digitalinnovation.personAPI.controller;
 
 import one.digitalinnovation.personAPI.dto.MessageResponseDTO;
 import one.digitalinnovation.personAPI.entity.Person;
-import one.digitalinnovation.personAPI.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import one.digitalinnovation.personAPI.service.PersonService;
 
-@RestController
+
+//SERVE PRA COTROLAR AS ENTRADAS
 //indica onde sera visto no site
+@RestController
 @RequestMapping("/api/v1/people")
-public class PersonController {
-    private PersonRepository personRepository;
+public class PersonController{
+
+    private PersonService personService;
 
     @Autowired
-    public PersonController(PersonRepository personRepository){
-        this.personRepository = personRepository;
+    public PersonController(PersonService personService){
+        this.personService = personService;
     }
 
+    //criacao de um livro
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public MessageResponseDTO createPerson(@RequestBody Person person){
-        personRepository.save(person);
-        return MessageResponseDTO
-                .builder()
-                .build();
+        return personService.createPerson(person);
     }
 
 

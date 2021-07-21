@@ -9,12 +9,12 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-
+//campos do banco de dados
+@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-//campos do banco de dados
 public class Person {
 
     @Id
@@ -27,11 +27,14 @@ public class Person {
     @Column(nullable = false)
     private String lastName;
 
+    //fala que cpf deve ser unico
     @Column(nullable = false, unique = true)
     private String cpf;
 
     private LocalDate birthDate;
 
+    //1 pra muitos que fala que 1 pessoa tem varias telefones
+    //lazy e utilizado para performance, cascade e uma estategia de insercao.
     @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Phone> phones;
 }
