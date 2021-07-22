@@ -1,7 +1,9 @@
 package one.digitalinnovation.personAPI.service;
 
-import one.digitalinnovation.personAPI.dto.MessageResponseDTO;
+import one.digitalinnovation.personAPI.dto.request.PersonDTO;
+import one.digitalinnovation.personAPI.dto.response.MessageResponseDTO;
 import one.digitalinnovation.personAPI.entity.Person;
+import one.digitalinnovation.personAPI.mapper.PersonMapper;
 import one.digitalinnovation.personAPI.repository.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,9 @@ public class PersonService {
 
     private PersonRepository personRepository;
 
+    private final PersonMapper personMapper = PersonMapper.INSTANCE;
+
+
 
     //indica que o spring deve usar um contrato tipo repository
     @Autowired
@@ -21,8 +26,10 @@ public class PersonService {
 
 
     //criacao de um livro
-    public MessageResponseDTO createPerson(Person person){
-        Person savedPerson = personRepository.save(person);
+    public MessageResponseDTO createPerson(PersonDTO personDTO){
+        Person personToSave = personMapper.toModel(personDTO);
+
+        Person savedPerson = personRepository.save(personToSave);
         return MessageResponseDTO
                 .builder()
                 .message("Created person with ID " + savedPerson.getId())
